@@ -29,19 +29,68 @@ CHECKOUT_PASSPHRASE=your-passphrase checkout-wallet add-credential \
 CHECKOUT_PASSPHRASE=your-passphrase checkout-wallet serve
 ```
 
-## Agent Configuration
+## OpenClaw
 
-### OpenClaw
+checkout.md ships as both an **OpenClaw skill** and an **MCP server**.
 
-```yaml
-mcp:
-  servers:
-    checkout:
-      command: checkout-wallet serve
-      args: ["--vault", "~/.checkout/vault.db"]
+### Install the skill
+
+Copy the `skill/` directory into your OpenClaw skills folder:
+
+```bash
+cp -r skill/ ~/.openclaw/skills/checkout-wallet/
 ```
 
-### Claude Code
+Or install from ClawHub (once published):
+
+```bash
+clawhub install checkout-wallet
+```
+
+### Add the MCP server
+
+Add to your `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "mcp": {
+        "servers": [
+          {
+            "name": "checkout-wallet",
+            "command": "checkout-wallet",
+            "args": ["serve", "--vault", "~/.checkout/vault.db"],
+            "env": {
+              "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+Set your passphrase in your environment:
+
+```bash
+export CHECKOUT_PASSPHRASE=your-passphrase
+```
+
+That's it. Your OpenClaw agent now has access to the checkout-wallet tools and knows the protocol from the SKILL.md instructions.
+
+### What your agent sees
+
+The SKILL.md teaches your agent to:
+1. Check available policies before requesting credentials
+2. Request scoped tokens with a stated purpose
+3. Handle denials and approval requests gracefully
+4. Report usage after every token use
+
+All of this happens automatically — the agent reads the skill instructions and follows the protocol.
+
+## Claude Code
 
 Add to your MCP settings:
 
@@ -57,6 +106,14 @@ Add to your MCP settings:
     }
   }
 }
+```
+
+## Cursor / Windsurf / Any MCP Client
+
+checkout-wallet is a standard MCP server over STDIO. Point any MCP-compatible agent at:
+
+```bash
+checkout-wallet serve --vault ~/.checkout/vault.db
 ```
 
 ## Policies
@@ -91,6 +148,8 @@ policies:
       - read
 ```
 
+See [`examples/checkout.policies.yaml`](examples/checkout.policies.yaml) for more examples (Stripe, GitHub, AWS, Twilio).
+
 ### Policy fields
 
 | Field | Description |
@@ -109,13 +168,13 @@ policies:
 
 ## checkout.md (the file)
 
-When you run `checkout-wallet init`, it creates a `checkout.md` file alongside your vault. This file is the agent instruction set — the equivalent of `heartbeat.md` or `soul.md` in OpenClaw. It tells agents:
+When you run `checkout-wallet init`, it creates a `checkout.md` file alongside your vault. This file is the agent instruction set — the equivalent of `soul.md` or `heartbeat.md` in OpenClaw. It tells agents:
 
 - What tools are available
 - The request/use/report protocol
 - Rules: don't cache credentials, respect denials, report all usage
 
-Place it where your agent framework reads instruction files, or it will be picked up automatically from `~/.checkout/checkout.md`.
+The OpenClaw skill (`skill/SKILL.md`) contains the same instructions in OpenClaw's skill format with proper frontmatter.
 
 ## CLI Reference
 
@@ -156,6 +215,13 @@ The `serve` command requires `CHECKOUT_PASSPHRASE` as an environment variable (s
 3. If allowed, vault decrypts the credential and issues a short-lived scoped token
 4. Agent uses the token and calls `checkout_report_usage`
 5. Everything is logged to the append-only audit database
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). We especially welcome:
+- Policy examples for common services
+- Tested integration configs for agent frameworks
+- Bug reports and security feedback
 
 ## License
 

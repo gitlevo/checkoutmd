@@ -1,0 +1,21 @@
+{
+  // Add this to your ~/.openclaw/openclaw.json
+  // Docs: https://docs.openclaw.ai/gateway/configuration
+
+  "agents": {
+    "defaults": {
+      "mcp": {
+        "servers": [
+          {
+            "name": "checkout-wallet",
+            "command": "checkout-wallet",
+            "args": ["serve", "--vault", "~/.checkout/vault.db"],
+            "env": {
+              "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

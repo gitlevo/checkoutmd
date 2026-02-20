@@ -1,0 +1,59 @@
+# Example policies for common use cases
+# Copy to ~/.checkout/checkout.policies.yaml and customize
+
+version: "1"
+
+policies:
+  # Stripe — shopping skill with budget limits
+  - name: stripe-shopping
+    description: "Shopping skill can charge up to $50/tx, $200/month"
+    credential: stripe-key
+    grant_to:
+      agent_id: "*"
+      skill_id: "shopping"
+    actions:
+      - charge
+      - refund
+    budget:
+      max_per_transaction: 50
+      max_per_month: 200
+      currency: USD
+    approval_threshold: 25
+    ttl: 300
+
+  # GitHub — read-only for all agents
+  - name: github-readonly
+    description: "Read-only GitHub access"
+    credential: github-token
+    grant_to:
+      agent_id: "*"
+    actions:
+      - read
+    ttl: 600
+
+  # AWS — staging only, gated by CEL condition
+  - name: aws-staging
+    description: "AWS access only for staging deployments"
+    credential: aws-key
+    grant_to:
+      agent_id: ["deploy-agent"]
+    actions:
+      - deploy
+      - read
+    condition: 'purpose.contains("staging")'
+    ttl: 120
+
+  # Twilio — send SMS with a per-month cap
+  - name: twilio-notifications
+    description: "Send SMS notifications, max $10/month"
+    credential: twilio-key
+    grant_to:
+      agent_id: "*"
+      skill_id: "notifications"
+    actions:
+      - send
+    budget:
+      max_per_transaction: 1
+      max_per_month: 10
+      currency: USD
+    ttl: 60
