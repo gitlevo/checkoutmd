@@ -1,0 +1,70 @@
+{
+  "name": "@checkoutmd/wallet",
+  "version": "0.1.0",
+  "description": "The credential wallet for the open agent ecosystem. MCP-native, local-first, policy-driven.",
+  "keywords": [
+    "mcp",
+    "credentials",
+    "wallet",
+    "ai-agents",
+    "security",
+    "model-context-protocol",
+    "openclaw",
+    "credential-management",
+    "policy-engine"
+  ],
+  "license": "Apache-2.0",
+  "author": "checkoutmd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitlevo/checkoutmd"
+  },
+  "homepage": "https://github.com/gitlevo/checkoutmd",
+  "bugs": {
+    "url": "https://github.com/gitlevo/checkoutmd/issues"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "checkout-wallet": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "checkout.md",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli.js",
+    "serve": "node dist/cli.js serve",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@node-rs/argon2": "^2.0.2",
+    "better-sqlite3": "^11.8.1",
+    "commander": "^13.1.0",
+    "yaml": "^2.7.0",
+    "zod": "^3.24.2",
+    "@marcbachmann/cel-js": "^7.1.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.13.4",
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.6"
+  }
+}
