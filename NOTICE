@@ -1,0 +1,42 @@
+checkout.md — Credential Wallet for AI Agents
+Copyright 2025 checkoutmd contributors
+
+Licensed under the Apache License, Version 2.0.
+
+IMPORTANT DISCLAIMERS
+
+This software manages sensitive credentials (API keys, payment tokens, secrets)
+on behalf of its users. By using this software, you acknowledge and agree:
+
+1. USE AT YOUR OWN RISK. This software is provided as-is, without warranty of
+   any kind. You are solely responsible for the security of your credentials,
+   the configuration of your policies, and any actions taken by AI agents using
+   credentials obtained through this software.
+
+2. NO GUARANTEE OF SECURITY. While this software implements encryption
+   (AES-256-GCM) and key derivation (Argon2id), no software can guarantee
+   absolute security. This implementation has not undergone a formal third-party
+   security audit. You should evaluate whether it meets your security
+   requirements before storing real credentials.
+
+3. FINANCIAL RESPONSIBILITY. If you configure this software to provide payment
+   tokens or other financial credentials to AI agents, you are solely responsible
+   for any charges, transactions, or financial losses that result. Budget limits
+   and spending controls are best-effort safeguards, not guarantees.
+
+4. NOT A COMPLIANCE SOLUTION. This software is not certified under PCI-DSS,
+   SOC 2, HIPAA, or any other regulatory framework. If your use case requires
+   regulatory compliance, you must evaluate and ensure compliance independently.
+
+5. AGENT BEHAVIOR. This software provides a governance layer for AI agent
+   credential access, but it cannot control or guarantee agent behavior. Agents
+   may misuse credentials within the scope granted to them. Policy configuration
+   is your responsibility.
+
+6. PASSPHRASE RESPONSIBILITY. Your vault passphrase is the sole protection for
+   your encrypted credentials. If you lose your passphrase, your credentials
+   cannot be recovered. If your passphrase is compromised, your credentials
+   should be considered compromised.
+
+This notice does not modify the Apache License, Version 2.0 under which this
+software is distributed.

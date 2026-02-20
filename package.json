@@ -39,6 +39,7 @@
     "dist",
     "checkout.md",
     "LICENSE",
+    "NOTICE",
     "README.md"
   ],
   "scripts": {

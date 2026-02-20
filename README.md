@@ -236,6 +236,17 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). We especially welcome:
 - Tested integration configs for agent frameworks
 - Bug reports and security feedback
 
+## Security
+
+This software manages real credentials. Please read the [NOTICE](NOTICE) file before use.
+
+- Encryption has not undergone a formal third-party security audit
+- Budget limits are best-effort safeguards, not guarantees
+- You are responsible for your policy configuration and any actions agents take with granted credentials
+- If you lose your passphrase, your credentials cannot be recovered
+
+If you discover a security issue, please report it via [GitHub Security Advisories](https://github.com/gitlevo/checkoutmd/security/advisories/new) rather than a public issue.
+
 ## License
 
-Apache 2.0 — open-source, free forever.
+Apache 2.0 — open-source, free forever. See [NOTICE](NOTICE) for important disclaimers.
