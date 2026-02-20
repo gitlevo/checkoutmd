@@ -31,11 +31,18 @@ CHECKOUT_PASSPHRASE=your-passphrase checkout-wallet serve
 
 ## OpenClaw
 
-checkout.md ships as both an **OpenClaw skill** and an **MCP server**.
+checkout.md integrates with OpenClaw through two layers: a **skill** (teaches the agent the protocol) and an **MCP server** (provides the tools).
 
-### Install the skill
+### 1. Install the wallet
 
-Copy the `skill/` directory into your OpenClaw skills folder:
+```bash
+npm install -g @checkoutmd/wallet
+checkout-wallet init
+```
+
+### 2. Install the skill
+
+Copy into your OpenClaw skills folder:
 
 ```bash
 cp -r skill/ ~/.openclaw/skills/checkout-wallet/
@@ -47,48 +54,54 @@ Or install from ClawHub (once published):
 clawhub install checkout-wallet
 ```
 
-### Add the MCP server
+The skill gates on `checkout-wallet` being in PATH and `CHECKOUT_PASSPHRASE` being set. If either is missing, the skill is silently excluded.
 
-Add to your `~/.openclaw/openclaw.json`:
+### 3. Add the MCP server
+
+Save the MCP config (see [`examples/openclaw.json`](examples/openclaw.json)):
 
 ```json
 {
-  "agents": {
-    "defaults": {
-      "mcp": {
-        "servers": [
-          {
-            "name": "checkout-wallet",
-            "command": "checkout-wallet",
-            "args": ["serve", "--vault", "~/.checkout/vault.db"],
-            "env": {
-              "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
-            }
-          }
-        ]
+  "mcpServers": {
+    "checkout-wallet": {
+      "command": "checkout-wallet",
+      "args": ["serve", "--vault", "~/.checkout/vault.db"],
+      "env": {
+        "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
       }
     }
   }
 }
 ```
 
-Set your passphrase in your environment:
+Then point your CLI backend at it in `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "cliBackends": {
+        "claude-cli": {
+          "args": ["--mcp-config", "~/.checkout/mcp.json"]
+        }
+      }
+    }
+  }
+}
+```
+
+Set your passphrase:
 
 ```bash
 export CHECKOUT_PASSPHRASE=your-passphrase
 ```
 
-That's it. Your OpenClaw agent now has access to the checkout-wallet tools and knows the protocol from the SKILL.md instructions.
+### How it works in OpenClaw
 
-### What your agent sees
-
-The SKILL.md teaches your agent to:
-1. Check available policies before requesting credentials
-2. Request scoped tokens with a stated purpose
-3. Handle denials and approval requests gracefully
-4. Report usage after every token use
-
-All of this happens automatically — the agent reads the skill instructions and follows the protocol.
+1. OpenClaw discovers the skill and shows its description in the agent's context
+2. When a task needs credentials, the agent reads the full SKILL.md to learn the protocol
+3. The MCP tools (`checkout_request_credential`, etc.) are available via the CLI backend
+4. The agent follows the request → use → report cycle automatically
 
 ## Claude Code
 

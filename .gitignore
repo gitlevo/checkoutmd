@@ -22,3 +22,6 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+# Reference repos
+.openclaw-ref/

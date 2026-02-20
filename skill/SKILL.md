@@ -1,56 +1,37 @@
 ---
 name: checkout-wallet
 description: >
-  Credential wallet for AI agents. When the user needs you to use API keys,
-  payment tokens, or secrets, use checkout-wallet to request scoped, short-lived
-  tokens instead of raw credentials. Enforces spending limits, action constraints,
-  and logs everything.
+  Secure credential wallet. When you need API keys, payment tokens, or secrets to
+  complete a task, use checkout-wallet to request scoped, short-lived tokens. Never
+  use raw credentials directly. Enforces spending limits and logs all access.
 homepage: https://checkout.md
 user-invocable: true
-metadata:
-  openclaw:
-    requires:
-      bins:
-        - checkout-wallet
-      env:
-        - CHECKOUT_PASSPHRASE
-    primaryEnv: CHECKOUT_PASSPHRASE
+metadata: |
+  {
+    "openclaw": {
+      "emoji": "🔐",
+      "primaryEnv": "CHECKOUT_PASSPHRASE",
+      "requires": {
+        "bins": ["checkout-wallet"],
+        "env": ["CHECKOUT_PASSPHRASE"]
+      },
+      "install": [
+        {
+          "id": "npm",
+          "kind": "node",
+          "package": "@checkoutmd/wallet",
+          "bins": ["checkout-wallet"],
+          "label": "Install checkout-wallet (npm)"
+        }
+      ],
+      "homepage": "https://checkout.md"
+    }
+  }
 ---
 
 # checkout-wallet
 
 You have access to a credential wallet. This is the governance layer between you and real-world credentials (API keys, payment tokens, secrets). You do not have direct access to credentials — you request scoped, short-lived tokens through the wallet.
-
-## Setup
-
-This skill requires the checkout-wallet MCP server. Add to your `openclaw.json`:
-
-```json
-{
-  "agents": {
-    "defaults": {
-      "mcp": {
-        "servers": [
-          {
-            "name": "checkout-wallet",
-            "command": "checkout-wallet",
-            "args": ["serve", "--vault", "~/.checkout/vault.db"],
-            "env": {
-              "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
-            }
-          }
-        ]
-      }
-    }
-  }
-}
-```
-
-Install the wallet:
-```bash
-npm install -g @checkoutmd/wallet
-checkout-wallet init
-```
 
 ## Protocol
 

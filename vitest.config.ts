@@ -4,5 +4,7 @@ export default defineConfig({
   test: {
     globals: true,
     testTimeout: 10000,
+    include: ["tests/**/*.test.ts"],
+    exclude: ["node_modules", ".openclaw-ref"],
   },
 });

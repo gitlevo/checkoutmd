@@ -1,20 +1,29 @@
 {
-  // Add this to your ~/.openclaw/openclaw.json
-  // Docs: https://docs.openclaw.ai/gateway/configuration
+  // checkout-wallet MCP config for OpenClaw CLI backends
+  //
+  // 1. Save this as ~/.checkout/mcp.json (or wherever you prefer)
+  // 2. Point your CLI backend at it in ~/.openclaw/openclaw.json:
+  //
+  //    {
+  //      "agents": {
+  //        "defaults": {
+  //          "cliBackends": {
+  //            "claude-cli": {
+  //              "args": ["--mcp-config", "~/.checkout/mcp.json"]
+  //            }
+  //          }
+  //        }
+  //      }
+  //    }
+  //
+  // 3. The checkout-wallet skill (skill/SKILL.md) teaches the agent the protocol.
 
-  "agents": {
-    "defaults": {
-      "mcp": {
-        "servers": [
-          {
-            "name": "checkout-wallet",
-            "command": "checkout-wallet",
-            "args": ["serve", "--vault", "~/.checkout/vault.db"],
-            "env": {
-              "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
-            }
-          }
-        ]
+  "mcpServers": {
+    "checkout-wallet": {
+      "command": "checkout-wallet",
+      "args": ["serve", "--vault", "~/.checkout/vault.db"],
+      "env": {
+        "CHECKOUT_PASSPHRASE": "${CHECKOUT_PASSPHRASE}"
       }
     }
   }
